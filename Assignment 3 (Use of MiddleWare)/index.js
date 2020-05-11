@@ -13,19 +13,30 @@ const admin = (req, res) => {
 };
 
 // flag to restrict middleware
-const checkAdmin = true;
+const checkAdmin = true; //flase
 
 const isAdmin = (req, res, next) => {
     if (!checkAdmin) {
         console.log("Your not Admin");
+        res.send("You Not have Admin privilleges..!!");
     } else {
         console.log("isAdmin is running..!!");
         next();
     }
 }
 
-// Test Of Middleware
-app.get('/admin', isAdmin, admin);
+var loggedIn = true; //false
+const isLoggedIn = (req, res, next) => {
+        if (loggedIn) {
+            console.log("User Logged In");
+            next();
+        } else {
+            console.log("Not logged In");
+            res.send("Please Logged in");
+        }
+    }
+    // Test Of Middleware
+app.get('/admin', isLoggedIn, isAdmin, admin);
 
 app.get('/login', (req, res) => {
     res.send("Login Works..!!");
